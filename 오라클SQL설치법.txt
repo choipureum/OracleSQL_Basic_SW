@@ -1,0 +1,128 @@
+< 오라클 Database 11g R2 Express Edition > 
+ 
+ -http://www.oracle.com/database/technologies/xe-prior-releases.html
+
+ -www.oracle.com 접속
+
+ -메뉴에서 Downloads선택
+ 
+ -Database 항목선택
+
+ -제일 밑에 Oracle Database 11g Release 2 Express Edition for Windows 64선택
+
+ -Oracle Database 11gR2 Express Edition for Windows x64 선택해서 다운로드
+
+ -라이센스 항목 체크하고 동의
+
+ -회원가입 및 로그인하면 다운로드 시작함
+
+
+
+< 오라클 SQL Developer 다운로드 >
+
+ -www.oracle.com 접속
+
+ -메뉴에서 Downloads선택
+ 
+ -Developer Tools 항목선택
+
+ -SQL Developer
+
+ -Windows 64-bit with JDK 8 included 항목의 Download선택
+
+ -라이센스 항목 체크하고 동의
+
+ -회원가입 및 로그인하면 다운로드 시작함
+
+
+
+< 오라클 DBMS 설치확인 > 
+
+ - 윈도우 콘솔 열기
+
+ - sqlplus /nolog  -->sql 실행
+
+ - conn sys as sysdba ->관리자계정으로 접속
+
+ - 비밀번호 1234입력
+
+ - show user;입력
+
+ - USER is "SYS"라고 나오면 설치완료
+
+ - conn System/1234 입력
+
+ - USER is "SYSTEM"이 나온다
+
+ - @ 타이핑만 해둔 상태에서 scott.sql 파일 드래그 앤 드랍 ->파일의 경로가 자동으로 입력됨
+
+ - 엔터
+
+ - ALTER USER scott IDENTIFIED BY tiger;
+
+ - conn scott/tiger;
+
+ - show user;
+   -> USER is "SCOT"나오면 성공
+
+
+< SQL Developer 에서 데베 접속하기 >
+
+ - 파일 메뉴 - 새로 만들기
+
+ - General  - 접속선택
+
+ - 오른쪽 창에서 데베 접속 선택
+
+ - 확인
+
+ - 접속이름 : 아무거나 (ex:WEB)
+ - 사용자이름 : scott
+ - 비밀번호  : tiger
+ - 비밀번호 저장 체크
+
+ - 테스트 ->상태:성공 뜨는 거 확인
+ - 접속 
+
+ - 부팅시 자동으로 켜지기를 꺼야된다
+
+< 부팅시 오라클 서비스 켜지지 않게 하기 >
+
+ - 실행창 -> services.msc 입력
+
+ - OracleServiceXE
+ - OracleXETNSListener
+
+ - 위 두 서비스의 시작 유형을 "수동"으로 변경
+
+ - 부팅할 때 자동으로 켜지지 않음
+ - 대신 오라클 DB를 사용하려면 "start Database" 프로그램을 실행해야함
+
+
+< 오라클 클라이언트 툴(Tool) >
+
+ 1. SQL * Plus
+	- Oracle DBMS에서 제공하는 기본 도구 Tool
+	- 별도의 설치없이 사용 가능
+	- CLI환경(Command Line Interface)
+	
+	- 윈도우 콘솔에서 sqlplus라고 입력
+	- 시작메뉴에서 'Run SQL Command Line' 실행
+
+ 2. SQL * Developer
+	- 오라클에서 제공하는 추가 클라이언트
+	- GUI환경 (Graphical User Interface)	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
