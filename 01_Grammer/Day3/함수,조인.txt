@@ -1,0 +1,163 @@
+< 기타 단일 행 함수 >
+
+ - NVL : 
+	매개변수가 NULL인지 판단하여 NULl이라면 원하는 값으로 변환하는 함수
+	NVL(데이터, 원하는 값)
+
+ - NVL2 : 
+	매개변수가 NULL인지 판단하여 NULl이라면 원하는 값으로 변환하는 함수
+	NVL과 다른점: NULL이 아닐 경우도 원하는 값으로 변환할 수 있다
+
+	NVL(데이터, NULL이 아닐 경우 반환값, NULL일 경우 반환값)
+
+ - NULLIF : 
+	두 개의 값이 같은지 비교하여 같으면 NULL반환
+	다르면 첫번째 매개변수를 반환
+	
+	NULLIF(첫째값, 둘째값)
+
+ - DECODE :
+	비교값을 여러 개 나열하여 비교결과를 반환하는 함수
+	--기준값과 비교값이 같으면 반환값
+	DECODE( 기준 값,
+		 비교값1, 반환값1,
+		 비교값2, 반환값2...) --알아보기가 힘드므로 개행을 해준다 
+	
+	** default 값은 생략 가능
+	** 기준값과 비교값이 같을 때 비교값 바로 다음에 오는 반환값을 반환
+
+ - CASE :
+	DECODE 함수와 비슷한 동작을 하는 구문
+	CASE ~ WHEN THEN~ END 로 구성됨
+	WHEN THEN  절에 조건에 따른 반환값을 설정
+	WHEN THEN 절의 마지막에 ELSE구문을 추가할 수 있다.
+
+
+< 그룹 함수, Group Function >
+
+ - 복수 행 함수
+ - 테이블의 여러 행들의 데이터를 그룹화하여 하나의 결과로 반환하는 함수
+ - 주로 테이블 데이터의 통계처리를 수행한다
+
+ - COUNT : 데이터를 가지고 있는 행 수를 반환
+	NULL값은 무시한다
+	NULL값을 가지는 컬럼은 전체 행 수에 포함되지 않는다
+	** count(*) vs count(1) 성능은 똑같다
+
+ - SUM : 합계
+ - AVG : 평균
+ - MIN : 최솟값
+ - MAX : 최댓값
+
+< GROUP BY 절 >
+ 
+ - 데이터(행)들을 원하는 기준으로 그룹화할 때 사용하는 절
+ - 그룹함수를 사용할 때 적용한다
+ - 컬럼을 기준으로 같은 값을 가지고 있는 행끼리 그룹화한다.
+
+**SELECT 절에서 그룹 함수 외의 다른 컬럼을 같이 조회하려면 GROUP BY 절에 그룹 함수를 제외한 모든 컬럼을 넣어주어야 한다
+	ex) SELECT
+		deptno, sum(sal) FROM EMP GROUP BY deptno;
+	ex2) SELECT deptno,job,count(*) FROM emp GROUP BY deptno,job;
+
+< HAVING 절 >
+
+ - GROUP BY 절 다음에 올 수 있는 조건절
+ - WHERE 절과 같은 기능
+ - 그룹함수의 결과를 조건식으로 사용하고 싶을 때 사용한다
+ 
+< SELECT 구문 작성 순서 >
+
+  SELECT - FROM  - WHERE - GROUP BY - HAVING - ORDER BY
+
+< SELECT 구문 수행 순서 >
+ 
+ 1. FROM : 조회될 대상 테이블을 확인 
+ 2. WHERE : 조건에 맞는 조회 대상(행)을 지정한다
+ 3. GROUP BY : 그룹화
+ 4. HAVING : 그룹함수를 이용한 조건절 수행
+ 5. SELECT : 보여질 컬럼을 지정한다
+ 6. ORDER BY : 정렬 
+
+ ** 수행순서에 따라 Alias도 반영된다
+
+ ** SELECT에서 지정한 Alias를 OrderBY 에서 사용할 수 있다
+ ** SELECT에서 지정한 Alias를 WHERE에서 사용할 수 없다
+
+ ** WHERE절 그룹함수를 사용할 수 없다
+
+
+< 조인, Join >
+
+ - 두 개 이상의 Table을 한번에 SELECT 하는 방법
+
+ - 주로 기본키(Primary Key)와 외래키(Foreign Key)를 이용하여 조인 조건을 설정한다
+	** 조인조건 : 두 개 이상의 테이블을 결합할 때 사용하는 조건
+ 
+ ** Primary Key, 기본키 , 주키(PK)
+		+ 테이블의 각 행들을 구분하기 위한 식별값으로 쓰이는 칼럼
+		+ 유일성(ex)ID)
+		
+		--기본키 무결성 원칙--
+		UNIQUE-유일성
+		NOT NULL-NULL값을 가지면 안된다
+		----------------------
+	
+
+ ** Foreign Key, 외래키, 참조키(FK)	
+		- 다른 테이블의 컬럼을 참조하고 있는 컬럼
+
+		- 다른 테이블의 Primary Key를 참조한다
+
+		----- 참조 무결성 원칙 -----
+		참조 테이블의 기본키의 값으로 존재하는 값만 가질 수 있음
+		----------------------------
+		
+< 조인 문법 종류 >
+
+ - 오라클 전용 문법
+
+ - ANSI 표준 문법
+
+(밑에는 중요 x)	
+ ** ANSI(American National Standards Institude) : 미국 국립 표준 협회
+	문자 인코딩( ASCII)
+	ISO 기구에 속해있다
+
+	** ISO(International Standard Organization) : 국제 표준화 기구
+		국제 표준화 기구
+		OSI 7계층 모형
+
+	**IEEE(Institude of Electric and Electronics Engineers)
+		전기 전자 기술자 학회
+		IEEE 802.3 - 이더넷 (유선 통신)
+		IEEE 802.11 - 와이파이
+
+< EQUI JOIN, 등가조인 >
+ 
+ - 오라클 전용 구문
+ - 조인의 기본이 되며, FROM절에 조인 대상 테이블들 , 로 나열함다
+ - 조인 대상 테이블들의 공통데이터를 가지는 컬럼을 이용해 조인한다(등가 =)
+ - 조인 컬럼이 같은 값을 가질 때 조회될 수 있도록 WHERE절에서 조인 조건을 적용한다
+ - 가장 많이 사용되는 구문 형식이다
+
+
+< INNER JOIN , 내부조인 >
+
+ - ANSI 표준 문법
+
+ - EQUI JOIN과 같은 결과를 얻을 수 있다
+ - 구문 형식
+	FROM 기본 테이블 INNER JOIN 조인 테이블 ON 조인조건절
+
+ - INNER JOIN 키워드에서 INNER를 생략하고 JOIN만 사용해도 된다
+
+< NON-EQUI, 비등가조인 >
+ -EQUI JOIN과 문법은 같으나 조인조건의 연산자가 '='(equal)이 아닌 경우(EQUI조건을 훨씬 많이 사용한다)
+ 
+
+< SELF JOIN >
+ - 하나의 테이블로 자기 자신과 조인하는 것
+ - INNER로 똑같이 해주면 된다
+ 
+
