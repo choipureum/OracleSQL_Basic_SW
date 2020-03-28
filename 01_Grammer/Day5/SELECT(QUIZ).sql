@@ -104,6 +104,26 @@ ORDER BY pnum;
 -- 단 외과계열 환자만조회('02xx')
 -- where절 subquery
     
-
+--강사님코드(시간없어서 못품)
+SELECT
+    T.pat_code
+    , ( SELECT pat_name FROM PATIENT P WHERE T.pat_code=P.pat_code ) pat_name
+    , ( SELECT pat_birth FROM PATIENT P WHERE T.pat_code=P.pat_code ) pat_birth
+    , ( SELECT pat_gender FROM PATIENT P WHERE T.pat_code=P.pat_code ) pat_gender
+    , ( SELECT DOC_NAME FROM DOCTOR D WHERE D.doc_code = T.doc_code ) DOC_NAME
+    , ( SELECT DEP_NAME FROM DEPARTMENT M, DOCTOR D WHERE D.doc_code = T.doc_code AND M.DEP_CODE=D.DEP_CODE ) DEP_NAME
+FROM TREAT T
+WHERE 1=1
+    AND trt_year='2014'
+    AND trt_date='0102'
+    AND SUBSTR((
+        SELECT M.DEP_code
+        FROM DEPARTMENT M, DOCTOR D
+        WHERE D.doc_code = T.doc_code
+            AND M.DEP_CODE=D.DEP_CODE
+    ),0,2) = '02'
+ORDER BY PAT_CODE;
+                     
+        
 
 
