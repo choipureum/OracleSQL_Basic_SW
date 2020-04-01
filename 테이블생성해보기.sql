@@ -1,15 +1,3 @@
-CREATE TABLE userTb(
-    userno NUMBER CONSTRAINT userno_pk PRIMARY KEY,
-    userid VARCHAR2(50),
-    userpw VARCHAR2(100),
-    gender VARCHAR2(1) NOT NULL,
-    email VARCHAR2(100)NOT NULL,
-    phone VARCHAR2(11)NOT NULL,
-    grade NUMBER ,
-    report NUMBER,
-    CONSTRAINT grade_fk FOREIGN KEY(grade) REFERENCES grade(grade),
-    CONSTRAINT grade_fk2 FOREIGN KEY(report) REFERENCES report(report));
-    
 CREATE TABLE grade (
     grade NUMBER CONSTRAINT grade_pk PRIMARY KEY,
     gradename VARCHAR2(100));
@@ -19,6 +7,24 @@ CREATE TABLE report(
     report_dat DATE,
     report_reason VARCHAR2(500));
 
+
+CREATE TABLE userTb(
+    userno NUMBER CONSTRAINT userno_pk PRIMARY KEY,
+    userid VARCHAR2(50),
+    userpw VARCHAR2(100),
+    gender VARCHAR2(1) NOT NULL,
+    email VARCHAR2(100) NOT NULL,
+    phone VARCHAR2(11) NOT NULL,
+    grade NUMBER ,
+    report NUMBER,
+    CONSTRAINT grade_fk FOREIGN KEY(grade) REFERENCES grade(grade),
+    CONSTRAINT grade_fk2 FOREIGN KEY(report) REFERENCES report(report)  );
+    
+CREATE TABLE board_cafe(
+    cateno NUMBER PRIMARY KEY,
+    cate_name VARCHAR2(100),
+    cate_date DATE);
+
 CREATE TABLE board(
     boardno NUMBER PRIMARY KEY,
     cateno NUMBER,
@@ -27,16 +33,15 @@ CREATE TABLE board(
     insert_dat DATE,
     update_dat DATE,
     hit NUMBER,
-    has_file VARCHAR2(21),
+    has_file VARCHAR2(1),
     userno NUMBER,
     CONSTRAINT board_fk FOREIGN KEY(userno) REFERENCES userTb(userno),
     CONSTRAINT board_fk2 FOREIGN KEY(cateno) REFERENCES board_cafe(cateno)
     );
     
-CREATE TABLE board_cafe(
-    cateno NUMBER PRIMARY KEY,
-    cate_name VARCHAR2(100),
-    cate_date DATE);
+ALTER TABLE board ADD CONSTRAINT board_ck CHECK(has_file IN('y','n')); --y나 n만 받음
+    
+
     
 CREATE TABLE filetb(
     fileno NUMBER PRIMARY KEY,
@@ -57,13 +62,27 @@ CREATE TABLE commentTB(
     CONSTRAINT commentTB_fk1 FOREIGN KEY(boardno) REFERENCES board(boardno),
     CONSTRAINT commentTB_fk2 FOREIGN KEY(userno) REFERENCES userTb(userno)     
     );
+    
 
 
-    
-    
-    
-    
-    
-    
-    
-    
+--삭제하기 --외래키 지우고 fk -pk순으로 삭제
+ALTER TABLE userTb DROP CONSTRAINT grade_fk;
+ALTER TABLE userTb DROP CONSTRAINT grade_fk2;
+
+DROP TABLE grade;
+DROP TABLE report;
+
+ALTER TABLE board DROP CONSTRAINT board_fk;
+ALTER TABLE board DROP CONSTRAINT board_fk2;
+ALTER TABLE commentTb DROP CONSTRAINT commentTb_fk1;
+ALTER TABLE commentTb DROP CONSTRAINT commentTb_fk2;
+
+DROP TABLE userTb;
+DROP TABLE commentTb;
+DROP TABLE board_cafe;
+
+ALTER TABLE filetb DROP CONSTRAINT filetb_fk;
+
+DROP TABLE filetb;
+DROP TABLE board;
+
