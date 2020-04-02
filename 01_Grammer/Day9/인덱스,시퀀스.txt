@@ -1,0 +1,127 @@
+ < 인덱스의 종류 >
+
+ - Non-Unique INDEX : 중복 허용 인덱스
+	
+	CREATE INDEX 인덱스명 ON 테이블명(컬럼명);
+
+ - Unique INDEX : 중복 비허용 인덱스
+	
+	CREATE UNIQUE INDEX 인덱스명 ON 테이블명(컬럼명);
+
+ - Composite INDEX : 복합 컬럼 인덱스
+	
+	<둘다된다>
+	CREATE INDEX 인덱스명 ON 테이블명(컬럼명1,컬럼명2,컬럼명3....)
+	CREATE UNIQUE INDEX 인덱스명 ON 테이블명(컬럼명1,컬럼명2,컬럼명3....)
+
+< 인덱스 재생성 구문 >
+
+	ALTER INDEX 인덱스명 REBUILD;
+
+ - INSERT, UPDATE, DELETE가 많이 발생한 테이블은 기존에 만들어져 있는 인덱스와 데이터가 달라지게 되기때문에
+ - 인덱스의 효과가 떨어지게 된다
+ 
+< 인덱스 삭제 >
+ - DROP INDEX 인덱스명;
+
+ 
+ + 인덱스 자료사전
+ -user_indexs : 인덱스 정보 자료사전
+ -user_ind_columns : 인덱싱 컬럼 정보 자료사전
+
+
+< 뷰, VIEW >
+
+ - 복잡한 쿼리를 간단하게 표현하려는 목적을 가지고 있다
+ - 접근할 수 있는 데이터의 범위(컬럼)을 축소시키기 위해 사용하기도 한다.
+ - 테이블에서 조회되는 컬럼을 제한할 수 있다
+ - 조회결과를 저장하지 않는다
+ - VIEW는 SELECT 쿼리(서브쿼리)를 텍스트로 저장하고 있다
+ - 자료사전들은 대부분 VIEW이다
+ - 뷰를 통해서 원본 테이블에 조회,삽입, 수정, 삭제가 가능하다
+
+< 뷰 생성 구문 >
+	[] ->생략가능
+
+	CREATE [OR REPLACE] [FORCE | NOFORCE] VIEW viewname -- 더 자주쓴다 
+	AS(서브쿼리)
+	[WITH CHECK OPTION [CONSTRAINT 제약조건 ]]
+	[WITH READ ONLY]
+
+	- CREATE VIEW : 뷰를 생성
+	- CREATE OR REPLACE : 뷰를 생성(같은 이름이 없으면) or 서브쿼리 수정(같은 이름의 뷰가 있으면)
+	- FORCE : 서브쿼리의 조회대상(테이블)이 존재하지 않아도 뷰를 생성 - 강제적으로생성
+	- NOFORCE : 서브쿼리의 조회대상이 존재해야지만 뷰를 생성 - 노 강제 (적지 않으면 NOFORCE)
+	- WITH CHECK OPTION  : 제약조건에 맞는 데이터만 삽입,수정가능하게 설정
+		CONTRAINT 키워드로 제약조건을 넣지 않으면 서브쿼리로 조회할 수 있는 데이터만 삽입,수정가능
+	- WITH READ ONLY : 조회 전용 뷰로 설정
+	
+< 뷰 관련 자료 사전 >
+ - user_views 
+
+ + 뷰 삭제 구문
+	DROP VIEW viewname; -- 뷰는 alter가 없음 (CREATE OR REPLACE로 대체)
+
+
+
+< 시퀀스 ,Sequence >
+ - 테이블에 있는 정보들에 넘버링을 해준다
+ - 연속적인 숫자를 생성하는 객체 
+ - 정수값으로 생성한다
+ - 생성된 숫자는 테이블의 행을 구분하는 PRIMARY KEY로 사용된다(무조건X, 대부분)
+ - 테이블 내에서 유일한 숫자를 자동으로 생성(Auto INcrement)
+ - 테이블마다 적용할 시퀀스를 각각 따로 생성해서 관리한다 (테이블 5개면 시퀀스도 5개)
+ 
+
+< 시퀀스 생성구문 >
+
+	CREATE SEQUENCE 시퀀스명; 
+	->1부터 시작하는 +=1 시퀀스를 생성 (기본)
+	
+	CREATE SEQUENCE 시퀀스명
+	[START WITH n] 			--시작값
+	[INCREMENT BY n]		--증가값
+	[MAXVALUE n | NOMAXVALUE]	--최대값
+	[MINVALUE n | NOMINVALUE]	--최소값
+	[CYCLE | NOCYCLE]		--순환구조
+	[CACHE n | NOCACHE]		--미리생성할 숫자(캐시)의 개수(기본값 :20)
+	--노캐시면 즉시즉시 만들면서 진행(캐시면 미리 저장해둔걸 꺼내면서)
+	
+
+< 시퀀스 사용 방법 >
+
+	시퀀스명.currval --현재 시퀀스 값
+	시퀀스명.nextval --다음 시퀀스 값
+
+	ex) SELECT seq.nextval FROM dual;
+	
+	ex) --시퀀스를 통해서 사원번호 생성하여 자동 부여되게 만들기
+	INSERT INTO emp(empno, ename) VALUES(seq.nextval);
+
+
+< 시퀀스 변경 구문 >
+
+ - ALTER추가
+ - START WITH 못한다 - 시작값 변경 불가(바꿀필요가 없음)
+
+	ALTER SEQUENCE 시퀀스명			
+	[INCREMENT BY n]		--증가값
+	[MAXVALUE n | NOMAXVALUE]	--최대값
+	[MINVALUE n | NOMINVALUE]	--최소값
+	[CYCLE | NOCYCLE]		--순환구조
+	[CACHE n | NOCACHE]		--미리생성할 숫자(캐시)의 개수(기본값 :20)
+
+
+	**SEQUENCE의 현재진행하는 값을 임의로 바꿀 수 없다
+	**CREATE SEQUENCE의 START WITH옵션 빼고 전부 변경 가능
+
+< 시퀀스 삭제 > 
+ 
+ - DROP SEQUENCE 시퀀스명 ;
+
+< 시퀀스 자료사전 >
+
+ - SELECT * FROM user_sequences
+
+
+
