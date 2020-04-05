@@ -49,8 +49,8 @@
  - show user;입력
 
  - USER is "SYS"라고 나오면 설치완료
-
- - conn System/1234 입력
+	
+ - conn System/1234 입력 -안될경우 : ALTER USER SYSTEM ACCOUNT UNLOCK;으로 잠겨있는 계정을 
 
  - USER is "SYSTEM"이 나온다
 
